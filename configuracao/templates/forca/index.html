@@ -1,0 +1,93 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Jogo da Forca</title>
+    <link rel="stylesheet" href="{% static 'forca/style.css' %}">
+</head>
+
+<body>
+
+
+    <h1>Jogo da Forca</h1>
+
+    <p>Meu primeiro jogo com Python e Django!</p>
+
+    <h2>Dica da palavra:</h2>
+    <p>{{ dica }}</p>
+
+    <h2>Descubra a palavra:</h2>
+
+
+<p class="palavra-secreta">
+    {% for espaco in espacos %}
+        {{ espaco }}
+    {% endfor %}
+</p>
+
+
+    <h3>Erros: {{ erros }} de 6</h3>
+    
+<h3>Desenho da forca:</h3>
+
+<pre>
+  +-----+
+  |     |
+  |     {% if erros >= 1 %}O{% endif %}
+  |    {% if erros >= 3 %}/{% else %} {% endif %}{% if erros >= 2 %}|{% endif %}{% if erros >= 4 %}\{% endif %}
+  |    {% if erros >= 5 %}/{% else %} {% endif %} {% if erros >= 6 %}\{% endif %}
+  |
+=========
+</pre>
+
+    <p>
+        Letras tentadas:
+        {% for letra in letras %}
+            {{ letra }}
+        {% empty %}
+            Nenhuma ainda.
+        {% endfor %}
+    </p>
+
+    {% if ganhou %}
+        <h2>Parabéns! Você venceu!</h2>
+
+    {% elif perdeu %}
+        <h2>Fim de jogo! Você perdeu.</h2>
+        <p>A palavra era: {{ palavra }}</p>
+    {% endif %}
+
+    {% if not terminou %}
+
+        <h2>Escolha uma letra:</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <input
+                type="text"
+                name="letra"
+                maxlength="1"
+                required
+                placeholder="Digite uma letra"
+            >
+
+            <button type="submit">Tentar</button>
+        </form>
+
+    {% endif %}
+    
+<form method="POST">
+    {% csrf_token %}
+
+    <button type="submit" name="nova_partida" value="1">
+        Nova Partida
+    </button>
+</form>
+
+
+</body>
+</html>
